@@ -1,0 +1,37 @@
+# This file can be used to override the default puppet settings.
+# See the following links for more details on what settings are available:
+# - https://docs.puppetlabs.com/puppet/latest/reference/config_important_settings.html
+# - https://docs.puppetlabs.com/puppet/latest/reference/config_about_settings.html
+# - https://docs.puppetlabs.com/puppet/latest/reference/config_file_main.html
+# - https://docs.puppetlabs.com/puppet/latest/reference/configuration.html
+[agent]
+certname = <%= @hostname %>
+server = force
+environment = production
+runinterval = 5m
+
+vardir = /var/opt/puppetlabs/puppet
+logdir = /var/log/puppetlabs/puppet
+rundir = /var/run/puppetlabs/puppet
+pidfile = /var/run/puppetlabs/puppet/puppet.pid
+
+<% if @hostname == 'yoda' %>
+[master]
+certname = force
+
+vardir = /var/opt/puppetlabs/puppetserver
+ssldir = $vardir/ssl
+logdir = /var/log/puppetlabs/puppetserver
+rundir = /var/run/puppetlabs/puppetserver
+pidfile = /var/run/puppetlabs/puppetserver/puppetserver.pid
+codedir = /etc/puppetlabs/code
+
+dns_alt_names = force, force.iplab
+
+# TLS Certificates
+cacert = /etc/puppetlabs/puppet/ssl/certs/ca.pem
+cacrl = /etc/puppetlabs/puppet/ssl/crl.pem
+hostcert = /etc/puppetlabs/puppet/ssl/certs/force.pem
+hostprivkey = /etc/puppetlabs/puppet/ssl/private_keys/force.pem
+<% end %>
+

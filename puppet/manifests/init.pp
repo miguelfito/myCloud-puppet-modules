@@ -36,6 +36,21 @@
 # Copyright 2016 Your name here, unless otherwise noted.
 #
 class puppet {
+  # Make sure 'puppet' is installed
+  package { 'puppet-agent':
+    ensure	=> installed,
+  }
+
+  # Make sure 'puppet' has the correct configuration
+  file { '/etc/puppetlabs/puppet/puppet.conf':
+    content 	=> template("${module_name}/puppet_conf.erb"),
+    owner	=> root,
+    group	=> root,
+    mode	=> '644',
+    #notify	=> Service['puppet'], # puppet will restart whenever this file change
+    require 	=> Package['puppet-agent'],
+   }
+
   # Make sure 'puppet' is always running
   service { 'puppet':
     ensure      => running,
